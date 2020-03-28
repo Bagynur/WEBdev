@@ -1,6 +1,6 @@
 from django.http.response import HttpResponse, JsonResponse
 
-from api.models import Product
+from api.models import Product, Category
 
 def category_list(request):
     categories = Category.objects.all()
