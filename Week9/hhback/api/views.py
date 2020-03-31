@@ -4,9 +4,13 @@ from api.models import Company, Vacancy
 
 
 def company_list(request):
-    companies = Company.objects.all()
-    company_json = [company.to_company_json() for company in companies]
-    return JsonResponse(company_json, safe=False)
+    if request.method == 'GET':
+        companies = Company.objects.all()
+        company_json = [company.to_company_json() for company in companies]
+        return JsonResponse(company_json, safe=False)
+    elif request.method == 'POST':
+        # Must create new Product from request body
+        pass
 
 
 def company_detail(request, company_id):
@@ -14,7 +18,14 @@ def company_detail(request, company_id):
         company = Company.objects.get(id=company_id)
     except Company.DoesNotExist as e:
         return JsonResponse({'error': 'company doesn`t exist'})
-    return JsonResponse(company.to_company_json())
+    if request.method == 'GET':
+        return JsonResponse(company.to_company_json())
+    elif request.method == 'PUT':
+    # update product object
+        pass
+    elif request.method == 'DELETE':
+    # delete selected object
+        pass
 
 
 def vacancy_from_company(request, company_id):
@@ -32,9 +43,13 @@ def vacancy_from_company(request, company_id):
 
 
 def vacancy_list(request):
-    vacancies = Vacancy.objects.all()
-    vacancy_json = [vacancy.to_vacancy_json() for vacancy in vacancies]
-    return JsonResponse(vacancy_json, safe=False)
+    if request.method == 'GET':
+        vacancies = Vacancy.objects.all()
+        vacancy_json = [vacancy.to_vacancy_json() for vacancy in vacancies]
+        return JsonResponse(vacancy_json, safe=False)
+    elif request.method == 'POST':
+        # Must create new Product from request body
+        pass
 
 
 def vacancy_detail(request, vacancy_id):
@@ -42,9 +57,17 @@ def vacancy_detail(request, vacancy_id):
         vacancy = Vacancy.objects.get(id=vacancy_id)
     except Vacancy.DoesNotExist as e:
         return JsonResponse({'error': 'Vacancy doesn`t exist'})
-    return JsonResponse(vacancy.to_vacancy_json())
+    if request.method == 'GET':
+        return JsonResponse(vacancy.to_vacancy_json())
+    elif request.method == 'PUT':
+    # update product object
+        pass
+    elif request.method == 'DELETE':
+    # delete selected object
+        pass
 
 def vacancy_list10(request):
-    vacancies = Vacancy.objects.all().order_by('-salary')
-    vacancy_json = [vacancy.to_vacancy_json() for vacancy in vacancies]
-    return JsonResponse(vacancy_json, safe=False)
+    if request.method == 'GET':
+        vacancies = Vacancy.objects.all().order_by('-salary')[:10:1]
+        vacancy_json = [vacancy.to_vacancy_json() for vacancy in vacancies]
+        return JsonResponse(vacancy_json, safe=False)
