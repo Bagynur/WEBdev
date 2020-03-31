@@ -16,6 +16,7 @@ def company_detail(request, company_id):
         return JsonResponse({'error': 'company doesn`t exist'})
     return JsonResponse(company.to_company_json())
 
+
 def vacancy_from_company(request, company_id):
         vacancy = Company.objects.all()
         len_vacancy = len(vacancy)
@@ -42,3 +43,8 @@ def vacancy_detail(request, vacancy_id):
     except Vacancy.DoesNotExist as e:
         return JsonResponse({'error': 'Vacancy doesn`t exist'})
     return JsonResponse(vacancy.to_vacancy_json())
+
+def vacancy_list10(request):
+    vacancies = Vacancy.objects.all().order_by('-salary')
+    vacancy_json = [vacancy.to_vacancy_json() for vacancy in vacancies]
+    return JsonResponse(vacancy_json, safe=False)
