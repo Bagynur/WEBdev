@@ -29,17 +29,37 @@ def company_detail(request, company_id):
 
 
 def vacancy_from_company(request, company_id):
-        vacancy = Company.objects.all()
-        len_vacancy = len(vacancy)
+    # try:
+    #     company_id = Company.objects.get(id=company_id)
+    # except Company.DoesNotExist as e:
+    #     return JsonResponse({'error': str(e)})
+    #
+    # vacancy = Company.objects.all()
+    # vacancy_json = [vacancy.name for vacancy in vacancy]
+    # return JsonResponse(vacancy_json, safe=False)
+
+    #     vacancy = Company.objects.all()
+    #     len_vacancy = len(vacancy)
+    #     vacancy = []
+    #     for i in range(len_vacancy):
+    #         if vacancy[i].company_id_id.id == company_id:
+    #             vacancy.append(vacancy[i])
+    #     vacancy_json = [x.to_vacancy_json() for x in vacancy]
+    #     if (len(vacancy_json) != 0):
+    #         return JsonResponse(vacancy_json, safe=False)
+    #     else:
+    #         return JsonResponse({'error': 'Company doesn`t exist'})
+
+        vacancies = Vacancy.objects.all()
         vacancy = []
-        for i in range(len_vacancy):
-            if vacancy[i].company_id_id.id == company_id:
-                vacancy.append(vacancy[i])
-        vacancy_json = [x.to_vacancy_json() for x in vacancy]
-        if (len(vacancy_json) != 0):
-            return JsonResponse(vacancy_json, safe=False)
+        for vac in vacancies:
+            a = vac.to_vacancy_json()
+        if a['company_id'] == company_id:
+            vacancy.append(a)
+        if (len(vacancy)):
+            return JsonResponse(vacancy, safe=False)
         else:
-            return JsonResponse({'error': 'Company doesn`t exist'})
+            return HttpResponse("Error I cannot found smthg")
 
 
 def vacancy_list(request):
@@ -68,6 +88,6 @@ def vacancy_detail(request, vacancy_id):
 
 def vacancy_list10(request):
     if request.method == 'GET':
-        vacancies = Vacancy.objects.all().order_by('-salary')[:10:1]
+        vacancies = Vacancy.objects.all().filter(salary__gte=2.0).order_by('-salary')[:10:1]
         vacancy_json = [vacancy.to_vacancy_json() for vacancy in vacancies]
         return JsonResponse(vacancy_json, safe=False)
