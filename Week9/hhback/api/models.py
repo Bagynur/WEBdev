@@ -8,6 +8,9 @@ class Company(models.Model):
     city = models.CharField(max_length=30)
     address = models.TextField(default='')
 
+    def __str__(self):
+        return '{}: {}'.format(self.id, self.name, self.description, self.city, self.address)
+
     def to_company_json(self):
         return {
             'id': self.id,
@@ -22,7 +25,10 @@ class Vacancy(models.Model):
     name = models.CharField(max_length=30)
     description = models.TextField(default='')
     salary = models.FloatField(max_length=30)
-    company_id = models.ForeignKey(Company, on_delete=models.CASCADE, default=None)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=None)
+
+    def __str__(self):
+        return '{}: {}'.format(self.id, self.name, self.description, self.salary, self.company)
 
     def to_vacancy_json(self):
         return {
@@ -30,7 +36,7 @@ class Vacancy(models.Model):
             'name': self.name,
             'description': self.description,
             'salary': self.salary,
-            'company_id': self.company_id.to_company_json()
+            'company': self.company
         }
 
 

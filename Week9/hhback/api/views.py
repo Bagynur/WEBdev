@@ -1,93 +1,105 @@
+import json
 from django.http.response import HttpResponse, JsonResponse
-
+from django.views.decorators.csrf import csrf_exempt
 from api.models import Company, Vacancy
+from api.serializers import CompanySerializer, CompanySerializer2, VacancySerializer, VacancySerializer2
 
-
+@csrf_exempt
 def company_list(request):
     if request.method == 'GET':
         companies = Company.objects.all()
-        company_json = [company.to_company_json() for company in companies]
-        return JsonResponse(company_json, safe=False)
+        serializer = CompanySerializer(companies, many=True)
+        return JsonResponse(serializer.data, safe=False, status=200)
     elif request.method == 'POST':
-        # Must create new Product from request body
-        pass
+        data = json.loads(request.body)
+        serializer = CompanySerializer2(data=data)
+        if serializer.is_valid():
+            serializer.save()  # create function in serializer class
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors)
 
-
+@csrf_exempt
 def company_detail(request, company_id):
     try:
         company = Company.objects.get(id=company_id)
     except Company.DoesNotExist as e:
         return JsonResponse({'error': 'company doesn`t exist'})
     if request.method == 'GET':
-        return JsonResponse(company.to_company_json())
+        serializer = CompanySerializer(company)
+        return JsonResponse(serializer.data, status=200)
     elif request.method == 'PUT':
-    # update product object
-        pass
+        data = json.loads(request.body)
+        serializer = CompanySerializer(instance=company, data=data)
+        if serializer.is_valid():
+            serializer.save()  # update function in serializer class
+            return JsonResponse(serializer.data, status=200)
+        return JsonResponse(serializer.errors)
     elif request.method == 'DELETE':
-    # delete selected object
+        company.delete()
+        return JsonResponse({}, status=204)
+
+@csrf_exempt
+def vacancy_from_company(request, company_id):
+    if request.method == "GET":
+        try:
+            vacancy_list = Vacancy.objects.all()
+            vacancies = []
+            for vacancy in vacancy_list:
+                if vacancy.company.id == company_id:
+                    vacancies.append(vacancy.to_vacancy_json())
+        except Company.DoesNotExist as e:
+            return JsonResponse({'error': 'company doesn`t exist'})
+        return JsonResponse(vacancies,safe=False)
+    elif request.method == "POST":
         pass
 
-
-def vacancy_from_company(request, company_id):
-    # try:
-    #     company_id = Company.objects.get(id=company_id)
-    # except Company.DoesNotExist as e:
-    #     return JsonResponse({'error': str(e)})
-    #
-    # vacancy = Company.objects.all()
-    # vacancy_json = [vacancy.name for vacancy in vacancy]
-    # return JsonResponse(vacancy_json, safe=False)
-
-    #     vacancy = Company.objects.all()
-    #     len_vacancy = len(vacancy)
-    #     vacancy = []
-    #     for i in range(len_vacancy):
-    #         if vacancy[i].company_id_id.id == company_id:
-    #             vacancy.append(vacancy[i])
-    #     vacancy_json = [x.to_vacancy_json() for x in vacancy]
-    #     if (len(vacancy_json) != 0):
-    #         return JsonResponse(vacancy_json, safe=False)
-    #     else:
-    #         return JsonResponse({'error': 'Company doesn`t exist'})
-
-        vacancies = Vacancy.objects.all()
-        vacancy = []
-        for vac in vacancies:
-            a = vac.to_vacancy_json()
-        if a['company_id'] == company_id:
-            vacancy.append(a)
-        if (len(vacancy)):
-            return JsonResponse(vacancy, safe=False)
-        else:
-            return HttpResponse("Error I cannot found smthg")
-
-
+    # vacancies = Vacancy.objects.all()
+    # vacancy = []
+    # for vac in vacancies:
+    #     a = vac.to_vacancy_json()
+    # if a['company_id'] == company_id:
+    #     vacancy.append(a)
+    # if len(vacancy):
+    #     return JsonResponse(vacancy, safe=False)
+    # else:
+    #     return HttpResponse("Error I cannot found smthg")
+@csrf_exempt
 def vacancy_list(request):
     if request.method == 'GET':
         vacancies = Vacancy.objects.all()
-        vacancy_json = [vacancy.to_vacancy_json() for vacancy in vacancies]
-        return JsonResponse(vacancy_json, safe=False)
+        serializer = VacancySerializer(vacancies, many=True)
+        return JsonResponse(serializer.data, safe=False, status=200)
     elif request.method == 'POST':
-        # Must create new Product from request body
-        pass
+        data = json.loads(request.body)
+        serializer = VacancySerializer2(data=data)
+        if serializer.is_valid():
+            serializer.save()  # create function in serializer class
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors)
 
-
+@csrf_exempt
 def vacancy_detail(request, vacancy_id):
     try:
         vacancy = Vacancy.objects.get(id=vacancy_id)
     except Vacancy.DoesNotExist as e:
         return JsonResponse({'error': 'Vacancy doesn`t exist'})
     if request.method == 'GET':
-        return JsonResponse(vacancy.to_vacancy_json())
+        serializer = VacancySerializer(vacancy)
+        return JsonResponse(serializer.data, status=200)
     elif request.method == 'PUT':
-    # update product object
-        pass
+        data = json.loads(request.body)
+        serializer = VacancySerializer(instance=vacancy, data=data)
+        if serializer.is_valid():
+            serializer.save()  # update function in serializer class
+            return JsonResponse(serializer.data, status=200)
+        return JsonResponse(serializer.errors)
     elif request.method == 'DELETE':
-    # delete selected object
-        pass
+        vacancy.delete()
+        return JsonResponse({}, status=204)
 
+@csrf_exempt
 def vacancy_list10(request):
     if request.method == 'GET':
-        vacancies = Vacancy.objects.all().filter(salary__gte=2.0).order_by('-salary')[:10:1]
-        vacancy_json = [vacancy.to_vacancy_json() for vacancy in vacancies]
-        return JsonResponse(vacancy_json, safe=False)
+        vacancies = Vacancy.objects.all().filter(salary__gte=2.0).order_by('-salary')[:11:1]
+        serializer = VacancySerializer(vacancies, many=True)
+        return JsonResponse(serializer.data, safe=False, status=200)
