@@ -43,20 +43,35 @@ def company_detail(request, company_id):
         company.delete()
         return Response({'deleted': True})
 
-
+@api_view(['GET', 'POST'])
 def vacancy_from_company(request, company_id):
     if request.method == "GET":
         try:
             vacancy_list = Vacancy.objects.all()
             vacancies = []
+            serializer = VacancySerializer(vacancies, many=True)
             for vacancy in vacancy_list:
                 if vacancy.company.id == company_id:
-                    vacancies.append(vacancy.to_vacancy_json())
+                    vacancies.append(vacancy)
         except Company.DoesNotExist as e:
-            return JsonResponse({'error': 'company doesn`t exist'})
-        return JsonResponse(vacancies,safe=False)
+            return Response({'error': 'company doesn`t exist'})
+        return Response(serializer.data)
     elif request.method == "POST":
         pass
+
+
+    # if request.method == "GET":
+    #     try:
+    #         vacancy_list = Vacancy.objects.all()
+    #         vacancies = []
+    #         for vacancy in vacancy_list:
+    #             if vacancy.company.id == company_id:
+    #                 vacancies.append(vacancy.to_vacancy_json())
+    #     except Company.DoesNotExist as e:
+    #         return JsonResponse({'error': 'company doesn`t exist'})
+    #     return JsonResponse(vacancies,safe=False)
+    # elif request.method == "POST":
+    #     pass
 
     # vacancies = Vacancy.objects.all()
     # vacancy = []
