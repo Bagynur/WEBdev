@@ -2,7 +2,15 @@ from django.urls import path
 
 from api.views import company_list, company_detail, vacancy_list, vacancy_detail, vacancy_from_company, vacancy_list10
 
+from rest_framework_jwt.views import obtain_jwt_token
+
+from api.views_generic import CompanyListAPIView
+
+
 urlpatterns = [
+
+    path('login/', obtain_jwt_token),
+
     path('companies/', company_list),
     path('companies/<int:company_id>', company_detail),
     path('vacancies/', vacancy_list),

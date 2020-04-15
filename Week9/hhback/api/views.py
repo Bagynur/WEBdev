@@ -12,7 +12,7 @@ from api.serializers import CompanySerializer, CompanySerializer2, VacancySerial
 def company_list(request):
     if request.method == 'GET':
         companies = Company.objects.all()
-        serializer = CompanySerializer(companies, many=True)
+        serializer = CompanySerializer2(companies, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = CompanySerializer2(data=request.data)
@@ -30,11 +30,11 @@ def company_detail(request, company_id):
         return Response({'error': str(e)})
 
     if request.method == 'GET':
-        serializer = CompanySerializer(company)
+        serializer = CompanySerializer2(company)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = CompanySerializer(instance=company, data=request.data)
+        serializer = CompanySerializer2(instance=company, data=request.data)
         if serializer.is_valid():
             serializer.save()  # update function in serializer class
             return Response(serializer.data)
@@ -49,7 +49,7 @@ def vacancy_from_company(request, company_id):
         try:
             vacancy_list = Vacancy.objects.all()
             vacancies = []
-            serializer = VacancySerializer(vacancies, many=True)
+            serializer = VacancySerializer2(vacancies, many=True)
             for vacancy in vacancy_list:
                 if vacancy.company.id == company_id:
                     vacancies.append(vacancy)
@@ -87,7 +87,7 @@ def vacancy_from_company(request, company_id):
 def vacancy_list(request):
     if request.method == 'GET':
         vacancies = Vacancy.objects.all()
-        serializer = VacancySerializer(vacancies, many=True)
+        serializer = VacancySerializer2(vacancies, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = VacancySerializer2(data=request.data)
@@ -105,11 +105,11 @@ def vacancy_detail(request, vacancy_id):
         return Response({'error': str(e)})
 
     if request.method == 'GET':
-        serializer = VacancySerializer(vacancy)
+        serializer = VacancySerializer2(vacancy)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
-        serializer = VacancySerializer(instance=vacancy, data=request.data)
+        serializer = VacancySerializer2(instance=vacancy, data=request.data)
         if serializer.is_valid():
             serializer.save()  # update function in serializer class
             return Response(serializer.data)
