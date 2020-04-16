@@ -6,6 +6,14 @@ export interface Company {
   description: string;
 }
 
+export interface Vacancy {
+  id: number;
+  name: string;
+  salary: number;
+  company: number;
+  description: string;
+}
+
 export class LoginResponse {
   token: string;
 }

@@ -11,8 +11,8 @@ urlpatterns = [
 
     path('login/', obtain_jwt_token),
 
-    path('companies/', CompanyListAPIView.as_view()),
-    path('companies/<int:pk>', CompanyDetailAPIView.as_view()),
+    path('companies/', company_list),
+    path('companies/<int:company_id>', company_detail),
     path('vacancies/', VacancyListAPIView.as_view()),
     path('vacancies/<int:vacancy_id>', vacancy_detail),
     path('companies/<int:company_id>/vacancies', vacancy_from_company),

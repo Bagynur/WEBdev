@@ -7,7 +7,7 @@ import {Company, LoginResponse} from "./models";
   providedIn: 'root'
 })
 export class CompanyService {
-  BASE_URL = 'http://localhost:8000'
+  BASE_URL = 'http://127.0.0.1:8000'
   constructor(private http: HttpClient) {}
 
   getCompanyList(): Observable<Company[]> {
@@ -15,6 +15,10 @@ export class CompanyService {
   }
   getCompany(id): Observable<Company> {
     return this.http.get<Company>(`${this.BASE_URL}/api/companies/${id}/`);
+  }
+
+  getCompanyVac(id): Observable<Company> {
+    return this.http.get<Company>(`${this.BASE_URL}/api/companies/${id}/vacancies`);
   }
 
   deleteCompany(id): Observable<any> {

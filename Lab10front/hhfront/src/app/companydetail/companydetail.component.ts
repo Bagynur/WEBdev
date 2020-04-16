@@ -22,4 +22,8 @@ export class CompanydetailComponent implements OnInit {
     this.companyService.getCompany(id).subscribe(company => this.company = company);
   }
 
+  getCompanyVac(){
+    
+  }
+
 }

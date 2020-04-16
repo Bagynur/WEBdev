@@ -8,12 +8,16 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {AuthInterceptor} from "./auth.interceptor";
 import { CompanydetailComponent } from './companydetail/companydetail.component';
+import { VacancylistComponent } from './vacancylist/vacancylist.component';
+import { VacancydetailComponent } from './vacancydetail/vacancydetail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CompanylistComponent,
-    CompanydetailComponent
+    CompanydetailComponent,
+    VacancylistComponent,
+    VacancydetailComponent
   ],
   imports: [
     AppRoutingModule,
