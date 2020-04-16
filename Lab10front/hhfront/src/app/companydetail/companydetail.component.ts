@@ -11,7 +11,7 @@ export class CompanydetailComponent implements OnInit {
 
   company: Company;
 
-  constructor(private companyService: CompanyService, private route: ActivatedRoute) { }
+  constructor(public companyService: CompanyService, public route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.getCompany();
@@ -23,7 +23,7 @@ export class CompanydetailComponent implements OnInit {
   }
 
   getCompanyVac(){
-    
+
   }
 
 }

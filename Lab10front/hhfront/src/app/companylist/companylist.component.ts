@@ -26,7 +26,7 @@ export class CompanylistComponent implements OnInit {
 
   deleteCompany(id) {
     this.companyService.deleteCompany(id).subscribe(res => {
-      // this.categories = this.categories.filter(c => c.id != id);
+      this.companies = this.companies.filter(c => c.id != id);
       // this.getCategoryList();
     });
   }
