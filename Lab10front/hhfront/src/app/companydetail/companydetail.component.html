@@ -3,5 +3,9 @@
   <p>Name: {{ company.name}}</p>
   <p>City:{{company.city}} </p>
   <p>Address:{{company.address}}</p>
-  <p>Descriotion:{{company.description}}</p>
+  <p>Description:{{company.description}}</p>
+  <div *ngFor="let vacancy of vacancies">
+    <a [routerLink]="'/companies/' + company.id+'/vacancies/'+vacancy.id">{{ vacancy.name }}</a>
+    <button (click)="deleteVacancy(vacancy.id)">Delete</button>
+  </div>
 </div>

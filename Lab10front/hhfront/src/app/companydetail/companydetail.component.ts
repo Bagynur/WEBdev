@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {CompanyService} from "../company.service";
-import {Company} from "../models";
+import{VacancyService} from '../vacancy.service'
+import {Company, Vacancy} from "../models";
 @Component({
   selector: 'app-companydetail',
   templateUrl: './companydetail.component.html',
@@ -9,12 +10,14 @@ import {Company} from "../models";
 })
 export class CompanydetailComponent implements OnInit {
 
-  company: Company;
+  company: Company
+  vacancies: Vacancy[] = [];
 
-  constructor(public companyService: CompanyService, public route: ActivatedRoute) { }
+  constructor(private companyService: CompanyService,private vacancyService: VacancyService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.getCompany();
+    this.getVacancyList();
   }
 
   getCompany() {
@@ -22,8 +25,19 @@ export class CompanydetailComponent implements OnInit {
     this.companyService.getCompany(id).subscribe(company => this.company = company);
   }
 
-  getCompanyVac(){
+  getVacancyList() {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.vacancyService.getVacancyList(id)
+      .subscribe(vacancies => {
+        this.vacancies = vacancies
+      });
+  }
 
+  deleteVacancy(id) {
+    this.vacancyService.deleteVacancy(id).subscribe(res => {
+      // this.categories = this.categories.filter(c => c.id != id);
+      // this.getCategoryList();
+    });
   }
 
 }

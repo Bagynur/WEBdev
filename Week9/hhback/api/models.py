@@ -11,14 +11,14 @@ class Company(models.Model):
     def __str__(self):
         return '{}: {}'.format(self.id, self.name, self.description, self.city, self.address)
 
-    # def to_company_json(self):
-    #     return {
-    #         'id': self.id,
-    #         'name': self.name,
-    #         'description': self.description,
-    #         'city': self.city,
-    #         'address': self.address
-    #     }
+    def to_company_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'city': self.city,
+            'address': self.address
+        }
 
 
 class Vacancy(models.Model):
@@ -30,13 +30,13 @@ class Vacancy(models.Model):
     def __str__(self):
         return '{}: {}'.format(self.id, self.name, self.description, self.salary, self.company)
 
-    # def to_vacancy_json(self):
-    #     return {
-    #         'id': self.id,
-    #         'name': self.name,
-    #         'description': self.description,
-    #         'salary': self.salary,
-    #         'company': self.company
-    #     }
+    def to_vacancy_json(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'salary': self.salary,
+            'company': self.company
+        }
 
 
